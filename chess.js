@@ -1,7 +1,20 @@
 
 var boardStateArray = [];
 var cellsToPaint = [];
-// var cellObject = '';
+var uCode = {
+    wPawn: String.fromCharCode(parseInt(2659, 16)),
+    wRook: String.fromCharCode(parseInt(2656, 16)),
+    wKnight: String.fromCharCode(parseInt(2658, 16)),
+    wBishop: String.fromCharCode(parseInt(2657, 16)),
+    wKing: String.fromCharCode(parseInt(2654, 16)),
+    wQueen: String.fromCharCode(parseInt(2655, 16)),
+    bPawn: String.fromCharCode(parseInt('265F', 16)),
+    bRook: String.fromCharCode(parseInt('265C', 16)),
+    bKnight: String.fromCharCode(parseInt('265E', 16)),
+    bBishop: String.fromCharCode(parseInt('265D', 16)),
+    bKing: String.fromCharCode(parseInt('265A', 16)),
+    bQueen: String.fromCharCode(parseInt('265B', 16))
+}
 
 
 
@@ -13,97 +26,97 @@ function setUp() {
             var cell = document.getElementById;
             var cellId = document.getElementById(i + '' + j);
             var cellObject = {
-                id: i + '' + j,
-                cellStatus: 'none',
+                id: i + '' + j
+                // cellStatus: 'none',
             }
             cellId.setAttribute('id', i + '' + j);
             rowArray.push(cellObject);
             if (i === 1){
-                cellId.innerHTML = String.fromCharCode(parseInt('265F', 16));
+                cellId.innerHTML = uCode.bPawn;
                 cellObject.pieceType= 'pawn';
                 cellObject.pieceColor = 'black';
-                cellObject.cellStatus = 'piece';
+                // cellObject.cellStatus = 'piece';
                 cellId.addEventListener("click", function (event){
                     console.log(event);
                     determinePiece(event.target.id);
                     });
             } else if (i === 0) {
                 cellObject.pieceColor = 'black';
-                cellObject.cellStatus = 'piece';
+                // cellObject.cellStatus = 'piece';
                 cellId.addEventListener("click", function(event){
                     console.log(event);
                     determinePiece(event.target.id);
                     });
                     if (j === 0) {
-                        cellId.innerHTML = String.fromCharCode(parseInt('265C', 16));
+                        cellId.innerHTML = uCode.bRook;
                         cellObject.pieceType= 'rook';
                     } else if (j === 7) {
-                        cellId.innerHTML = String.fromCharCode(parseInt('265C', 16));
+                        cellId.innerHTML = uCode.bRook;
                         cellObject.pieceType= 'rook';
                     } else if (j === 1) {
-                        cellId.innerHTML = String.fromCharCode(parseInt('265E', 16));
+                        cellId.innerHTML = uCode.bKnight;
                         cellObject.pieceType= 'knight';
                     } else if (j === 6) {
-                        cellId.innerHTML = String.fromCharCode(parseInt('265E', 16));
+                        cellId.innerHTML = uCode.bKnight;
                         cellObject.pieceType= 'knight';
                     } else if (j === 2){
-                        cellId.innerHTML = String.fromCharCode(parseInt('265D', 16));
+                        cellId.innerHTML = uCode.bBishop;
                         cellObject.pieceType= 'bishop';
                     } else if (j === 5){
-                        cellId.innerHTML = String.fromCharCode(parseInt('265D', 16));
+                        cellId.innerHTML = uCode.bBishop;
                         cellObject.pieceType= 'bishop';
                     } else if (j === 3){
-                        cellId.innerHTML = String.fromCharCode(parseInt('265B', 16));
+                        cellId.innerHTML = uCode.bQueen;
                         cellObject.pieceType= 'queen';
                     } else if (j === 4){
-                        cellId.innerHTML = String.fromCharCode(parseInt('265A', 16));
+                        cellId.innerHTML = uCode.bKing;
                         cellObject.pieceType= 'king';
                     }
             } else if (i === 7) {
                 cellObject.pieceColor = 'white';
-                cellObject.cellStatus = 'piece';
+                // cellObject.cellStatus = 'piece';
                 cellId.addEventListener("click", function (event){
                     console.log(event);
                     determinePiece(event.target.id);
                     });
                     if (j === 0) {
-                        cellId.innerHTML = String.fromCharCode(parseInt('2656', 16));
+                        cellId.innerHTML = uCode.wRook;
                         cellObject.pieceType= 'rook';
                     } else if (j === 7) {
-                        cellId.innerHTML = String.fromCharCode(parseInt('2656', 16));
+                        cellId.innerHTML = uCode.wRook;
                         cellObject.pieceType= 'rook';
                     } else if (j === 1) {
-                        cellId.innerHTML = String.fromCharCode(parseInt('2658', 16));
+                        cellId.innerHTML = uCode.wKnight;
                         cellObject.pieceType= 'knight';
                     } else if (j === 6) {
-                        cellId.innerHTML = String.fromCharCode(parseInt('2658', 16));
+                        cellId.innerHTML = uCode.wKnight;
                         cellObject.pieceType= 'knight';
                     } else if (j === 2){
-                        cellId.innerHTML = String.fromCharCode(parseInt('2657', 16));
+                        cellId.innerHTML = uCode.wBishop;
                         cellObject.pieceType= 'bishop';
                     } else if (j === 5){
-                        cellId.innerHTML = String.fromCharCode(parseInt('2657', 16));
+                        cellId.innerHTML = uCode.wBishop;
                         cellObject.pieceType= 'bishop';
                     } else if (j === 3){
-                        cellId.innerHTML = String.fromCharCode(parseInt('2655', 16));
+                        cellId.innerHTML = uCode.wQueen;
                         cellObject.pieceType= 'queen';
                     } else if (j === 4){
-                        cellId.innerHTML = String.fromCharCode(parseInt('2654', 16));
+                        cellId.innerHTML = uCode.wKing;
                         cellObject.pieceType= 'king';
                     }
             } else if (i === 6){
-                document.getElementById(i + '' + j).innerHTML = String.fromCharCode(parseInt('2659', 16));
+                document.getElementById(i + '' + j).innerHTML = uCode.wPawn;
                 cellObject.pieceType= 'pawn';
                 cellObject.pieceColor = 'white';
-                cellObject.cellStatus = 'piece';
+                // cellObject.cellStatus = 'piece';
                 cellId.addEventListener("click", function (event){
                     console.log(event);
                     determinePiece(event.target.id);
                     });
             } else if (i > 1 && i < 6){
-                document.getElementById(i + '' + j).innerHTML = i + '' + j; //print cell numbers
+                // document.getElementById(i + '' + j).innerHTML = i + '' + j; //print cell numbers
                 cellObject.pieceColor = 'none';
-                cellObject.cellStatus = 'none';
+                // cellObject.cellStatus = 'none';
                 cellObject.pieceType= 'none';
                 cellId.addEventListener("click", function (event){
                     console.log(event);
@@ -121,136 +134,148 @@ function determinePiece(id){
   var cell = parseInt(id[1]);
   var cellObject = boardStateArray[row][cell];
   var pieceColor = cellObject.pieceColor;
+  var firstMove = cellObject.firstMove;
   switch (cellObject.pieceType) {
       case 'rook':
-          var myRook = new Rook(id, cellObject);
-          myRook.getTargets('up', row, cell, pieceColor);
-          myRook.getTargets('down', row, cell, pieceColor);
-          myRook.getTargets('left', row, cell, pieceColor);
-          myRook.getTargets('right', row, cell, pieceColor);
+          var myRook = new Rook(id, cellObject, boardStateArray);
+          myRook.getTargets('up');
+          myRook.getTargets('down');
+          myRook.getTargets('left');
+          myRook.getTargets('right');
           console.log(cellsToPaint);
           break;
       case 'bishop':
-          var myBishop = new Bishop(id, cellObject);
-          myBishop.getTargets('upRight', row, cell, pieceColor);
-          myBishop.getTargets('upLeft', row, cell, pieceColor);
-          myBishop.getTargets('downRight', row, cell, pieceColor);
-          myBishop.getTargets('downLeft', row, cell, pieceColor);
+          var myBishop = new Bishop(id, cellObject, boardStateArray);
+          myBishop.getTargets('upRight');
+          myBishop.getTargets('upLeft');
+          myBishop.getTargets('downRight');
+          myBishop.getTargets('downLeft');
           console.log(cellsToPaint);
           break;
       case 'queen':
-          var myQueen = new Queen(id, cellObject);
-          myQueen.getTargets('up', row, cell, pieceColor);
-          myQueen.getTargets('down', row, cell, pieceColor);
-          myQueen.getTargets('left', row, cell, pieceColor);
-          myQueen.getTargets('right', row, cell, pieceColor);
-          myQueen.getTargets('upRight', row, cell, pieceColor);
-          myQueen.getTargets('upLeft', row, cell, pieceColor);
-          myQueen.getTargets('downRight', row, cell, pieceColor);
-          myQueen.getTargets('downLeft', row, cell, pieceColor);
+          var myQueen = new Queen(id, cellObject, boardStateArray);
+          myQueen.getTargets('up');
+          myQueen.getTargets('down');
+          myQueen.getTargets('left');
+          myQueen.getTargets('right');
+          myQueen.getTargets('upRight');
+          myQueen.getTargets('upLeft');
+          myQueen.getTargets('downRight');
+          myQueen.getTargets('downLeft');
           break;
       case 'knight':
-          var myKnight = new Knight(id, cellObject);
-          myKnight.getKnightTargets('upLeftKnight', row, cell, pieceColor, pieceType);
-          myKnight.getKnightTargets('upRightKnight', row, cell, pieceColor, pieceType);
-          myKnight.getKnightTargets('downLeftKnight', row, cell, pieceColor, pieceType);
-          myKnight.getKnightTargets('downRightKnight', row, cell, pieceColor, pieceType);
-          myKnight.getKnightTargets('rightUpKnight', row, cell, pieceColor, pieceType);
-          myKnight.getKnightTargets('rightDownKnight', row, cell, pieceColor, pieceType);
-          myKnight.getKnightTargets('leftUpKnight', row, cell, pieceColor, pieceType);
-          myKnight.getKnightTargets('leftDownKnight', row, cell, pieceColor, pieceType);
+          var myKnight = new Knight(id, cellObject, boardStateArray);
+          myKnight.getKnightTargets('upLeftKnight');
+          myKnight.getKnightTargets('upRightKnight');
+          myKnight.getKnightTargets('downLeftKnight');
+          myKnight.getKnightTargets('downRightKnight');
+          myKnight.getKnightTargets('rightUpKnight');
+          myKnight.getKnightTargets('rightDownKnight',;
+          myKnight.getKnightTargets('leftUpKnight');
+          myKnight.getKnightTargets('leftDownKnight');
           break;
       case 'king':
-          var myKing = new King(id, cellObject);
-          myKing.getKnightTargets('up', row, cell, pieceColor, pieceType);
-          myKing.getKnightTargets('down', row, cell, pieceColor, pieceType);
-          myKing.getKnightTargets('left', row, cell, pieceColor, pieceType);
-          myKing.getKnightTargets('right', row, cell, pieceColor, pieceType);
-          myKing.getKnightTargets('upRight', row, cell, pieceColor, pieceType);
-          myKing.getKnightTargets('upLeft', row, cell, pieceColor, pieceType);
-          myKing.getKnightTargets('downRight', row, cell, pieceColor, pieceType);
-          myKing.getKnightTargets('downLeft', row, cell, pieceColor, pieceType);
+          var myKing = new King(id, cellObject, boardStateArray);
+          myKing.getKingTargets('up');
+          myKing.getKingTargets('down');
+          myKing.getKingTargets('left');
+          myKing.getKingTargets('right');
+          myKing.getKingTargets('upRight');
+          myKing.getKingTargets('upLeft');
+          myKing.getKingTargets('downRight');
+          myKing.getKingTargets('downLeft');
           break;
-      case 'pawn':
-          var myPawn = new Pawn(id, cellObject);
-          if (pieceColor === 'black'){
-              if (firstMove === true){
-                  myPawn.getKnightTargets('firstDown', row, cell, pieceColor, pieceType);
-              } else {
-                  myPawn.getKnightTargets('down', row, cell, pieceColor, pieceType);
-                  myPawn.getKnightTargets('downRight', row, cell, pieceColor, pieceType);
-                  myPawn.getKnightTargets('downLeft', row, cell, pieceColor, pieceType);
-          } else {
-              if (firstMove === true){
-                  myPawn.getKnightTargets('firstUp', row, cell, pieceColor, pieceType);
-              } else {
-                  myPawn.getKnightTargets('up', row, cell, pieceColor, pieceType);
-                  myPawn.getKnightTargets('upRight', row, cell, pieceColor, pieceType);
-                  myPawn.getKnightTargets('upLeft', row, cell, pieceColor, pieceType);
-              }
+          case 'pawn':
+               var myPawn = new Pawn(id, cellObject, boardStateArray);
+               if (pieceColor === 'black'){
+                   if (firstMove){
+                       myPawn.getPawnTargets('firstDownP');
+                       myPawn.getPawnTargets('down');
+                       myPawn.getPawnTargets('downRight');
+                       myPawn.getPawnTargets('downLeft');
+                       cellObject.firstMove = false;
+                   }else{
+                       myPawn.getPawnTargets('down');
+                       myPawn.getPawnTargets('downRight');
+                       myPawn.getPawnTargets('downLeft');
+                   }
+               }else{
+                   if (firstMove){
+                       myPawn.getPawnTargets('firstUpP');
+                       myPawn.getPawnTargets('up');
+                       myPawn.getPawnTargets('upRight');
+                       myPawn.getPawnTargets('upLeft');
+                       cellObject.firstMove = false;
+                   }else{
+                       myPawn.getPawnTargets('up');
+                       myPawn.getPawnTargets('upRight');
+                       myPawn.getPawnTargets('upLeft');
+                   }
+               }
           }
       }
-  }
-}
 
 
-function Piece(row, cell, pieceType, pieceColor, cellStatus){
+
+
+function Piece(row, cell, pieceType, pieceColor, boardStateArray){
   this.row = row;
   this.cell = cell;
   this.pieceType = pieceType;
   this.pieceColor = pieceColor;
-  this.cellStatus = cellStatus;
+  this.boardStateArray = boardStateArray;
+  // this.cellStatus = cellStatus;
 }
-Piece.prototype.getTargets = function(direction, row, cell, pieceColor, pieceType){
+Piece.prototype.getTargets = function(direction){
     var fails = 0;
     var cellsHighlighted = 0;
     var justPainted = false;
     while (fails < 2){
         switch (direction) {
             case 'up':
-                row--;
+                this.row--;
                 break;
             case 'right':
-                cell++;
+                this.cell++;
                 break;
             case 'down':
-                row++;
+                this.row++;
                 break;
             case 'left':
-                cell--;
+                this.cell--;
                 break;
             case 'upLeft':
-                row--;
-                cell--;
+                this.row--;
+                this.cell--;
                 break;
             case 'upRight':
-                row--;
-                cell++;
+                this.row--;
+                this.cell++;
                 break;
             case 'downLeft':
-                row++;
-                cell--;
+                this.row++;
+                this.cell--;
                 break;
             case 'downRight':
-                row++;
-                cell++;
+                this.row++;
+                this.cell++;
                 break;
         }
-        if (row < 0 || cell < 0 || row > 7 || cell > 7){
+        if (this.row < 0 || this.cell < 0 || this.row > 7 || this.cell > 7){
             break;
         }
-        if (boardStateArray[row][cell].cellStatus === 'none'){
+        if (!this.boardStateArray[this.row][this.cell]){
             var targetCell = (row) + '' + (cell);
             cellsToPaint.push(targetCell);
-            boardStateArray[row][cell].cellStatus = 'available';
+            // boardStateArray[row][cell].cellStatus = 'available';
             if (fails > 0){
                 //break?
             }
             fails = 0;
             justPainted = true;
-        }else if (boardStateArray[row][cell].cellStatus === 'piece' && boardStateArray[row][cell].pieceColor === pieceColor){
+        }else if (this.boardStateArray[this.row][this.cell] && this.boardStateArray[this.row][this.cell].pieceColor === this.pieceColor){
             break;
-        }else if (boardStateArray[row][cell].cellStatus === 'piece' && boardStateArray[row][cell].pieceColor !== pieceColor){
+        }else if (this.boardStateArray[this.row][this.cell] && this.boardStateArray[this.row][this.cell].pieceColor !== this.pieceColor){
             fails++;
             if (justPainted && fails === 0){
                 break;
@@ -262,263 +287,311 @@ Piece.prototype.getTargets = function(direction, row, cell, pieceColor, pieceTyp
     }
 };
 //piece prototype move function?
-function Rook(id, cellObject){
-  Piece.call(this, parseInt(id[0]), parseInt(id[1]), cellObject.pieceType, cellObject.pieceColor, cellObject.cellStatus);
+function Rook(id, cellObject, boardStateArray){
+  Piece.call(this, parseInt(id[0]), parseInt(id[1]), cellObject.pieceType, cellObject.pieceColor, boardStateArray);
 }
 Rook.prototype = Piece.prototype;
 
-function Knight(id, cellObject){
-    Piece.call(this, parseInt(id[0]), parseInt(id[1]), cellObject.pieceType, cellObject.pieceColor, cellObject.cellStatus);
+
+function Bishop(id, cellObject, boardStateArray){
+   Piece.call(this, parseInt(id[0]), parseInt(id[1]), cellObject.pieceType, cellObject.pieceColor, boardStateArray);
+}
+Bishop.prototype = Piece.prototype;
+
+
+function Queen(id, cellObject, boardStateArray){
+   Piece.call(this, parseInt(id[0]), parseInt(id[1]), cellObject.pieceType, cellObject.pieceColor, boardStateArray);
+}
+Queen.prototype = Piece.prototype;
+
+
+
+function Knight(id, cellObject, boardStateArray){
+    Piece.call(this, parseInt(id[0]), parseInt(id[1]), cellObject.pieceType, cellObject.pieceColor, boardStateArray);
 }
 Knight.prototype = Piece.prototype;
-Knight.prototype.getKnightTargets = function(direction, row, cell, pieceColor, pieceType) {
+Knight.prototype.getKnightTargets = function(direction) {
     switch (direction) {
         case 'up':
-            row--;
+            this.row--;
             break;
         case 'right':
-            cell++;
+            this.cell++;
             break;
         case 'down':
-            row++;
+            this.row++;
             break;
         case 'left':
-            cell--;
+            this.cell--;
             break;
         case 'upLeft':
-            row--;
-            cell--;
+            this.row--;
+            this.cell--;
             break;
         case 'upRight':
-            row--;
-            cell++;
+            this.row--;
+            this.cell++;
             break;
         case 'downLeft':
-            row++;
-            cell--;
+            this.row++;
+            this.cell--;
             break;
         case 'downRight':
-            row++;
-            cell++;
+            this.row++;
+            this.cell++;
             break;
         case 'upLeftKnight':
-            row--;
-            row--;
-            cell--;
+            this.row--;
+            this.row--;
+            this.cell--;
             break;
         case 'upRightKnight':
-            row--;
-            row--;
-            cell++;
+            this.row--;
+            this.row--;
+            this.cell++;
             break;
         case 'downLeftKnight':
-            row++;
-            row++;
-            cell--;
+            this.row++;
+            this.row++;
+            this.cell--;
             break;
         case 'downRightKnight':
-            row++;
-            row++
-            cell++;
+            this.row++;
+            this.row++
+            this.cell++;
             break;
         case 'rightUpKnight':
-            row--;
-            cell++;
-            cell++;
+            this.row--;
+            this.cell++;
+            this.cell++;
             break;
         case 'rightDownKnight':
-            row++;
-            cell++;
-            cell++;
+            this.row++;
+            this.cell++;
+            this.cell++;
             break;
         case 'leftUpKnight':
-            row--;
-            cell--;
-            cell--;
+            this.row--;
+            this.cell--;
+            this.cell--;
             break;
         case 'leftDownKnight':
-            row++;
-            cell--;
-            cell--;
+            this.row++;
+            this.cell--;
+            this.cell--;
             break;
     }
-    if (row < 0 || cell < 0 || row > 7 || cell > 7){
+    if (this.row < 0 || this.cell < 0 || this.row > 7 || this.cell > 7){
         break;
     }
-    if (boardStateArray[row][cell].cellStatus === 'none'){
-        var targetCell = (row) + '' + (cell);
+    if (!this.boardStateArray[this.row][this.cell]){
+        var targetCell = (this.row) + '' + (this.cell);
         cellsToPaint.push(targetCell);
-        boardStateArray[row][cell].cellStatus = 'available';
-    }else if (boardStateArray[row][cell].cellStatus === 'piece' && boardStateArray[row][cell].pieceColor === pieceColor){
+        // this.boardStateArray[this.row][this.cell].cellStatus = 'available';
+    }else if (this.boardStateArray[this.row][this.cell] && this.boardStateArray[this.row][this.cell].pieceColor === this.pieceColor){
         break;
-    }else if (boardStateArray[row][cell].cellStatus === 'piece' && boardStateArray[row][cell].pieceColor !== pieceColor){
+    }else if (this.boardStateArray[this.row][this.cell] && this.boardStateArray[this.row][this.cell].pieceColor !== this.pieceColor){
         break;
         }
 };
 
 
-// Rook.prototype.getRookTargets = function(direction, row, cell, pieceColor) {
-//    //piece object constructor (new type of object called piece - contructor that takes x and y, what type of piece, build functions for prototype)
-//    //rook and bishop inherit from piece, create a get targets function for each prototype - each has own implementation - take 2d board array and location of piece to decide where piece can go
-//    //queen is just rook and bishop get targets functions
-//
-//
-//   // checkAvailable(this, row, cell, 'up', pieceColor);
-//   // checkAvailable(this, row, cell, 'right', pieceColor);
-//   var fails = 0;
-//   var cellsHighlighted = 0;
-//   var justPainted = false;
-//   while (fails < 2){
-//       switch (direction) {
-//           case 'up':
-//               row--;
-//               break;
-//           case 'right':
-//               cell++;
-//               break;
-//           case 'down':
-//               row++;
-//               break;
-//           case 'left':
-//               cell--;
-//               break;
-//           case 'upLeft':
-//               row--;
-//               cell--;
-//               break;
-//           case 'upRight':
-//               row--;
-//               cell++;
-//               break;
-//           case 'downLeft':
-//               row++;
-//               cell--;
-//               break;
-//           case 'downRight':
-//               row++;
-//               cell++;
-//               break;
-//       }
-//       if (row < 0 || cell < 0 || row > 7 || cell > 7){
-//           break;
-//       }
-//       if (boardStateArray[row][cell].cellStatus === 'none'){
-//           var targetCell = (row) + '' + (cell);
-//           cellsToPaint.push(targetCell);
-//           boardStateArray[row][cell].cellStatus = 'available';
-//           if (fails > 0){
-//               //break?
-//           }
-//           fails = 0;
-//           justPainted = true;
-//       }else if (boardStateArray[row][cell].cellStatus === 'piece' && boardStateArray[row][cell].pieceColor === pieceColor){
-//           break;
-//       }else if (boardStateArray[row][cell].cellStatus === 'piece' && boardStateArray[row][cell].pieceColor !== pieceColor){
-//           fails++;
-//           if (justPainted && fails === 0){
-//               break;
-//           }
-//           if (fails > 0){
-//               justPainted = false;
-//           }
-//       }
-//   }
-// };
 
-function Bishop(id, cellObject){
-   Piece.call(this, parseInt(id[0]), parseInt(id[1]), cellObject.pieceType, cellObject.pieceColor, cellObject.cellStatus);
+function King(id, cellObject, boardStateArray){
+    Piece.call(this, parseInt(id[0]), parseInt(id[1]), cellObject.pieceType, cellObject.pieceColor, boardStateArray);
 }
-Bishop.prototype = Piece.prototype;
-Bishop.prototype.getBishopTargets = function(direction, row, cell, pieceColor){}
-   //upLeft, upRight, downLeft, downRight
-   // var fails = 0;
-   // var cellsHighlighted = 0;
-   // var justPainted = false;
-   // while (fails < 2){
-   //     switch (direction) {
-   //         case 'up':
-   //             row--;
-   //             break;
-   //         case 'right':
-   //             cell++;
-   //             break;
-   //         case 'down':
-   //             row++;
-   //             break;
-   //         case 'left':
-   //             cell--;
-   //             break;
-   //         case 'upLeft':
-   //             row--;
-   //             cell--;
-   //             break;
-   //         case 'upRight':
-   //             row--;
-   //             cell++;
-   //             break;
-   //         case 'downLeft':
-   //             row++;
-   //             cell--;
-   //             break;
-   //         case 'downRight':
-   //             row++;
-   //             cell++;
-   //             break;
-   //     }
-   //     if (row < 0 || cell < 0 || row > 7 || cell > 7){
-   //         break;
-   //     }
-   //     if (boardStateArray[row][cell].cellStatus === 'none'){
-   //         var targetCell = (row) + '' + (cell);
-   //         cellsToPaint.push(targetCell);
-   //         boardStateArray[row][cell].cellStatus = 'available';
-   //         if (fails > 0){
-   //             //break?
-   //         }
-   //         fails = 0;
-   //         justPainted = true;
-   //     }else if (boardStateArray[row][cell].cellStatus === 'piece' && boardStateArray[row][cell].pieceColor === pieceColor){
-   //         break;
-   //     }else if (boardStateArray[row][cell].cellStatus === 'piece' && boardStateArray[row][cell].pieceColor !== pieceColor){
-   //         fails++;
-   //         if (justPainted && fails === 0){
-   //             break;
-   //         }
-   //         if (fails > 0){
-   //             justPainted = false;
-   //         }
-   //     }
-   // }
-   // }
-
-
-function updateArrays(){}
-
-function updateBoard (typeOfEvent) {
-    for(var i = 0; i < boardStateArray.length; i++) {
-        for(var j = 0; j < boardStateArray[i].length; j++) {
-            var cellClassArray = document.getElementById(boardStateArray[i][j].id).className.split(' ');
-            if(typeOfEvent === 'piece moved') {}
-            else {
-                if(boardStateArray[i][j].cellStatus === 'available') {
-                    cellClassArray.push('available-cell');
-                } else if(boardStateArray[i][j].cellStatus === 'none') {
-                    if(cellClassArray.indexOf('available-cell') !== -1) {
-                        cellClassArray.splice(cellClassArray.indexOf('available-cell'), 1);
-                    }
-                    if(cellClassArray.indexOf('clicked-cell') !== -1) {
-                        cellClassArray.splice(cellClassArray.indexOf('clicked-cell'), 1);
-                    }
-                } else if (boardStateArray[i][j].clicked === true) {
-                    cellClassArray.push('clicked-cell');
-                } else if(boardStateArray[i][j].cellStatus === 'piece' && cellClassArray.indexOf('clicked-cell') !== -1) {
-                    cellClassArray.splice(cellClassArray.indexOf('clicked-cell'), 1);
-                    // _availableSquares = [];
-                    // boardStateArray[i][j].potentiallyJumped = false;
-
-                }
-            }
-            document.getElementById(boardStateArray[i][j].id).className = cellClassArray.join(' ');
-        }
+King.prototype = Piece.prototype;
+King.prototype.getKingTargets = function(direction) {
+    switch (direction) {
+        case 'up':
+            this.row--;
+            break;
+        case 'right':
+            this.cell++;
+            break;
+        case 'down':
+            this.row++;
+            break;
+        case 'left':
+            this.cell--;
+            break;
+        case 'upLeft':
+            this.row--;
+            this.cell--;
+            break;
+        case 'upRight':
+            this.row--;
+            this.cell++;
+            break;
+        case 'downLeft':
+            this.row++;
+            this.cell--;
+            break;
+        case 'downRight':
+            this.row++;
+            this.cell++;
+            break;
+        case 'upLeftKnight':
+            this.row--;
+            this.row--;
+            this.cell--;
+            break;
+        case 'upRightKnight':
+            this.row--;
+            this.row--;
+            this.cell++;
+            break;
+        case 'downLeftKnight':
+            this.row++;
+            this.row++;
+            this.cell--;
+            break;
+        case 'downRightKnight':
+            this.row++;
+            this.row++
+            this.cell++;
+            break;
+        case 'rightUpKnight':
+            this.row--;
+            this.cell++;
+            this.cell++;
+            break;
+        case 'rightDownKnight':
+            this.row++;
+            this.cell++;
+            this.cell++;
+            break;
+        case 'leftUpKnight':
+            this.row--;
+            this.cell--;
+            this.cell--;
+            break;
+        case 'leftDownKnight':
+            this.row++;
+            this.cell--;
+            this.cell--;
+            break;
     }
+    if (this.row < 0 || this.cell < 0 || this.row > 7 || this.cell > 7){
+        break;
+    }
+    if (!this.boardStateArray[this.row][this.cell]){
+        var targetCell = (this.row) + '' + (this.cell);
+        cellsToPaint.push(targetCell);
+        // this.boardStateArray[this.row][this.cell].cellStatus = 'available';
+    }else if (this.boardStateArray[this.row][this.cell] && this.boardStateArray[this.row][this.cell].pieceColor === this.pieceColor){
+        break;
+    }else if (this.boardStateArray[this.row][this.cell] && this.boardStateArray[this.row][this.cell].pieceColor !== this.pieceColor){
+        break;
+        }
+};
+
+
+function Pawn(id, cellObject, boardStateArray){
+    Piece.call(this, parseInt(id[0]), parseInt(id[1]), cellObject.pieceType, cellObject.pieceColor, boardStateArray);
 }
+Pawn.prototype = Piece.prototype;
+Pawn.prototype.getPawnTargets = function(direction) {
+    switch (direction) {
+        case 'up':
+            this.row--;
+            break;
+        case 'right':
+            this.cell++;
+            break;
+        case 'down':
+            this.row++;
+            break;
+        case 'left':
+            this.cell--;
+            break;
+        case 'upLeft':
+            this.row--;
+            this.cell--;
+            break;
+        case 'upRight':
+            this.row--;
+            this.cell++;
+            break;
+        case 'downLeft':
+            this.row++;
+            this.cell--;
+            break;
+        case 'downRight':
+            this.row++;
+            this.cell++;
+            break;
+        case 'upLeftKnight':
+            this.row--;
+            this.row--;
+            this.cell--;
+            break;
+        case 'upRightKnight':
+            this.row--;
+            this.row--;
+            this.cell++;
+            break;
+        case 'downLeftKnight':
+            this.row++;
+            this.row++;
+            this.cell--;
+            break;
+        case 'downRightKnight':
+            this.row++;
+            this.row++
+            this.cell++;
+            break;
+        case 'rightUpKnight':
+            this.row--;
+            this.cell++;
+            this.cell++;
+            break;
+        case 'rightDownKnight':
+            this.row++;
+            this.cell++;
+            this.cell++;
+            break;
+        case 'leftUpKnight':
+            this.row--;
+            this.cell--;
+            this.cell--;
+            break;
+        case 'leftDownKnight':
+            this.row++;
+            this.cell--;
+            this.cell--;
+            break;
+        case 'firstDownP':
+            this.row++;
+            this.row++;
+            break;
+        case 'firstUpP':
+            this.row--;
+            this.row--;
+            break;
+    }
+    if (this.row < 0 || this.cell < 0 || this.row > 7 || this.cell > 7){
+        return;
+    }
+    if (this.pieceType === 'pawn'){
+           if (direction === 'upLeft' || direction === 'upRight' || direction === 'downLeft' || direction === 'downRight'){
+               if (!this.boardStateArray[this.row][this.cell]){
+                   return;
+               }
+           }
+           if (direction === 'up' || direction === 'down' || direction === 'firstUpP' || direction === 'firstDownP'){
+               if (this.boardStateArray[this.row][this.cell]){
+                   return;
+               }
+           }
+       }
+    if (!this.boardStateArray[this.row][this.cell]){
+        var targetCell = (this.row) + '' + (this.cell);
+        cellsToPaint.push(targetCell);
+        // this.boardStateArray[this.row][this.cell].cellStatus = 'available';
+    }else if (this.boardStateArray[this.row][this.cell] && this.boardStateArray[this.row][this.cell].pieceColor === this.pieceColor){
+        return;
+    }else if (this.boardStateArray[this.row][this.cell] && this.boardStateArray[this.row][this.cell].pieceColor !== this.pieceColor){
+        return;
+        }
+};
