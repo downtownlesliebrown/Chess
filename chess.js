@@ -1,6 +1,8 @@
 
 var boardStateArray = [];
 var cellsToPaint = [];
+var pieceEnRouteHTML;
+var pieceEnRouteObj = {};
 var uCode = {
     wPawn: String.fromCharCode(parseInt(2659, 16)),
     wRook: String.fromCharCode(parseInt(2656, 16)),
@@ -32,29 +34,25 @@ function setUp() {
             cellId.setAttribute('id', i + '' + j);
             rowArray.push(cellObject);
             if (i === 1){
-                document.getElementById(i + '' + j).innerHTML = i + '' + j; //print cell numbers
-                // cellObject.pieceColor = 'none';
-                // cellObject.cellStatus = 'none';
-                // cellObject.pieceType= 'none';
+                document.getElementById(i + '' + j).innerHTML = i + '' + j; //start: use this when I want to comment out black pawns for testing
                 cellId.addEventListener("click", function (event){
                     console.log(event);
-                    determinePiece(event.target.id);
+                    movePiece(event.target.id);
+                }); //end
+                cellId.innerHTML = uCode.bPawn;
+                cellObject.pieceType= 'pawn';
+                cellObject.pieceColor = 'black';
+                cellObject.firstMove = true;
+                cellId.addEventListener("click", function (event){
+                    console.log(event);
+                    movePiece(event.target.id);
                     });
-                // cellId.innerHTML = uCode.bPawn;
-                // cellObject.pieceType= 'pawn';
-                // cellObject.pieceColor = 'black';
-                // cellObject.firstMove = true;
-                // // cellObject.cellStatus = 'piece';
-                // cellId.addEventListener("click", function (event){
-                //     console.log(event);
-                //     determinePiece(event.target.id);
-                //     });
             } else if (i === 0) {
                 cellObject.pieceColor = 'black';
                 // cellObject.cellStatus = 'piece';
                 cellId.addEventListener("click", function(event){
                     console.log(event);
-                    determinePiece(event.target.id);
+                    movePiece(event.target.id);
                     });
                     if (j === 0) {
                         cellId.innerHTML = uCode.bRook;
@@ -86,7 +84,7 @@ function setUp() {
                 // cellObject.cellStatus = 'piece';
                 cellId.addEventListener("click", function (event){
                     console.log(event);
-                    determinePiece(event.target.id);
+                    movePiece(event.target.id);
                     });
                     if (j === 0) {
                         cellId.innerHTML = uCode.wRook;
@@ -121,7 +119,7 @@ function setUp() {
                 // cellObject.cellStatus = 'piece';
                 cellId.addEventListener("click", function (event){
                     console.log(event);
-                    determinePiece(event.target.id);
+                    movePiece(event.target.id);
                     });
             } else if (i > 1 && i < 6){
                 document.getElementById(i + '' + j).innerHTML = i + '' + j; //print cell numbers
@@ -130,7 +128,7 @@ function setUp() {
                 // cellObject.pieceType= 'none';
                 cellId.addEventListener("click", function (event){
                     console.log(event);
-                    determinePiece(event.target.id);
+                    movePiece(event.target.id);
                     });
             }
         }
@@ -139,12 +137,22 @@ function setUp() {
     console.log(boardStateArray);
 }
 
-function determinePiece(id){
+function movePiece(id){
   var row = parseInt(id[0]);
   var cell = parseInt(id[1]);
   var cellObject = boardStateArray[row][cell];
   var pieceColor = cellObject.pieceColor;
   var firstMove = cellObject.firstMove;
+  if (cellObject.painted === true) {
+      cellObject.newLocation = true;
+      updateBoards();
+    } else {
+    cellObject.firstClick = true;
+    pieceEnRouteHTML = document.getElementById(row + '' + cell).innerHTML; //temporary storage for moving piece
+    pieceEnRouteObj.pieceType = cellObject.pieceType;
+    pieceEnRouteObj.pieceColor = cellObject.pieceColor;
+    pieceEnRouteObj.firstMove = cellObject.firstMove;
+    }
   switch (cellObject.pieceType) {
       case 'rook':
           var myRook = new Rook(id, cellObject, boardStateArray);
@@ -295,11 +303,13 @@ Piece.prototype.getTargets = function(direction, row, cell){
         if (!this.boardStateArray[this.row][this.cell].pieceType){
             var targetCell = (this.row) + '' + (this.cell);
             this.cellsToPaint.push(targetCell);
+            this.boardStateArray[this.row][this.cell].painted = true;
         }else if (this.boardStateArray[this.row][this.cell] && this.boardStateArray[this.row][this.cell].pieceColor === this.pieceColor){
             break;
         }else if (this.boardStateArray[this.row][this.cell] && this.boardStateArray[this.row][this.cell].pieceColor !== this.pieceColor){
             var targetCell = (this.row) + '' + (this.cell);
             this.cellsToPaint.push(targetCell);
+            this.boardStateArray[this.row][this.cell].painted = true;
             potentialCapture++;
             break;
         }
@@ -380,12 +390,14 @@ Knight.prototype.getKnightTargets = function(direction, row, cell) {
     if (!this.boardStateArray[this.row][this.cell].pieceType){
         var targetCell = (this.row) + '' + (this.cell);
         this.cellsToPaint.push(targetCell);
+        this.boardStateArray[this.row][this.cell].painted = true;
         // this.boardStateArray[this.row][this.cell].cellStatus = 'available';
     }else if (this.boardStateArray[this.row][this.cell] && this.boardStateArray[this.row][this.cell].pieceColor === this.pieceColor){
         return;
     }else if (this.boardStateArray[this.row][this.cell] && this.boardStateArray[this.row][this.cell].pieceColor !== this.pieceColor){
         var targetCell = (this.row) + '' + (this.cell);
         this.cellsToPaint.push(targetCell);
+        this.boardStateArray[this.row][this.cell].painted = true;
         return;
         }
 };
@@ -435,12 +447,14 @@ King.prototype.getKingTargets = function(direction, row, cell) {
     if (!this.boardStateArray[this.row][this.cell].pieceType){
         var targetCell = (this.row) + '' + (this.cell);
         this.cellsToPaint.push(targetCell);
+        this.boardStateArray[this.row][this.cell].painted = true;
         // this.boardStateArray[this.row][this.cell].cellStatus = 'available';
     }else if (this.boardStateArray[this.row][this.cell] && this.boardStateArray[this.row][this.cell].pieceColor === this.pieceColor){
         return;
     }else if (this.boardStateArray[this.row][this.cell] && this.boardStateArray[this.row][this.cell].pieceColor !== this.pieceColor){
         var targetCell = (this.row) + '' + (this.cell);
         this.cellsToPaint.push(targetCell);
+        this.boardStateArray[this.row][this.cell].painted = true;
         return;
         }
 };
@@ -507,6 +521,7 @@ Pawn.prototype.getPawnTargets = function(direction, row, cell) {
     if (!this.boardStateArray[this.row][this.cell].pieceType){
         var targetCell = (this.row) + '' + (this.cell);
         this.cellsToPaint.push(targetCell);
+        this.boardStateArray[this.row][this.cell].painted = true;
         return;
         // this.boardStateArray[this.row][this.cell].cellStatus = 'available';
     }else if (this.boardStateArray[this.row][this.cell] && this.boardStateArray[this.row][this.cell].pieceColor === this.pieceColor){
@@ -514,21 +529,73 @@ Pawn.prototype.getPawnTargets = function(direction, row, cell) {
     }else if (this.boardStateArray[this.row][this.cell] && this.boardStateArray[this.row][this.cell].pieceColor !== this.pieceColor){
         var targetCell = (this.row) + '' + (this.cell);
         this.cellsToPaint.push(targetCell);
+        this.boardStateArray[this.row][this.cell].painted = true;
         return;
         }
 };
 
+// function paintTargets(cellsToPaint){
+//     var availableRow;
+//     var availableCell;
+//     var cellClassArray;
+//     for(var i = 0; i < cellsToPaint.length; i++) {
+//         availableRow = parseInt(cellsToPaint[i][0]);
+//         availableCell = parseInt(cellsToPaint[i][1]);
+//         cellClassArray = document.getElementById(availableRow + '' + availableCell).className.split(' ');
+//         cellClassArray.push('available-cell');
+//         document.getElementById(availableRow + '' + availableCell).className = cellClassArray.join(' ');
+//         }
+//         // document.getElementById(boardStateArray[availableRow][availableCell].id).className = cellClassArray.join(' ');
+//         cellsToPaint = [];
+//     }
+
 function paintTargets(cellsToPaint){
-    var availableRow;
-    var availableCell;
-    var cellClassArray;
-    for(var i = 0; i < cellsToPaint.length; i++) {
-        availableRow = parseInt(cellsToPaint[i][0]);
-        availableCell = parseInt(cellsToPaint[i][1]);
-        cellClassArray = document.getElementById(boardStateArray[availableRow][availableCell].id).className.split(' ');
-        cellClassArray.push('available-cell');
-        document.getElementById(boardStateArray[availableRow][availableCell].id).className = cellClassArray.join(' ');
+       var availableRow;
+       var availableCell;
+       var cellClassArray;
+   for (var i=0; i < cellsToPaint.length; i++){
+       availableRow = parseInt(cellsToPaint[i][0]);
+       availableCell = parseInt(cellsToPaint[i][1]);
+       var cellId = document.getElementById(availableRow + '' + availableCell);
+       cellId.setAttribute('class', 'available-cell');
+   }
+}
+
+function updateBoards(){
+    for (var i = 0; i < boardStateArray.length; i++){
+        delete pieceEnRouteObj.firstClick;
+        for(var j= 0; j < boardStateArray[i].length; j++){
+            if (boardStateArray[i][j].firstClick === true) {
+                document.getElementById(i + '' + j).innerHTML = i + '' + j; //print cell numbers
+                delete boardStateArray[i][j].firstClick;
+                delete boardStateArray[i][j].pieceType;
+                delete boardStateArray[i][j].pieceColor;
+            }
+            if (boardStateArray[i][j].newLocation === true){
+                document.getElementById(i + '' + j).innerHTML = pieceEnRouteHTML; //print piece in location
+                document.getElementById(i + '' + j).setAttribute('class', 'cell');
+                boardStateArray[i][j] = pieceEnRouteObj;
+                delete boardStateArray[i][j].newLocation;
+            }
+            if (boardStateArray[i][j].painted === true){
+                document.getElementById(i + '' + j).setAttribute('class', 'cell');
+                delete boardStateArray[i][j].painted;
+            }
         }
-        // document.getElementById(boardStateArray[availableRow][availableCell].id).className = cellClassArray.join(' ');
-        cellsToPaint = [];
     }
+    cellsToPaint = [];
+    console.log(boardStateArray);
+    pieceEnRouteHTML = '';
+    pieceEnRouteObj = {};
+}
+
+// function testRemovePaint(cellId, availableRow, availabeCell){
+//     for (var i=0; i < cellsToPaint.length; i++){
+//         availableRow = parseInt(cellsToPaint[i][0]);
+//         availableCell = parseInt(cellsToPaint[i][1]);
+//         // cellId.removeAttribute('available-cell');
+//         cellId.setAttribute('class', 'cell');
+//         delete boardStateArray[availableRow][availableCell].painted;
+//         delete boardStateArray[availableRow][availableCell].newLocation;
+//     }
+// }
