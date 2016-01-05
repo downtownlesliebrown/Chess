@@ -89,8 +89,19 @@ a {
     font-size: 3.5vw;
     color: gray;
  }
-}
+
 
 .clicked-cell {
     background-color: #bddfeb;
+    position: relative;
+    /*display: block;*/
+    float: left;
+    width: 10.982%;
+    height: 99%;
+    border-color: darkgrey;
+    border: 1px;
+    border-style: solid;
+    text-align: center;
+    font-size: 3.5vw;
+    color: gray;
 }

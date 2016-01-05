@@ -1,4 +1,6 @@
-
+var checkingForCheck = false;
+var opponentColor;
+var cellsForCheck = [];
 var boardStateArray = [];
 var cellsToPaint = [];
 var pieceEnRouteHTML;
@@ -113,19 +115,20 @@ function setUp() {
                     }
             } else if (i === 6){
                 document.getElementById(i + '' + j).innerHTML = uCode.wPawn;
-                cellObject.pieceType= 'pawn';
-                cellObject.pieceColor = 'white';
-                cellObject.firstMove = true;
-                // cellObject.cellStatus = 'piece';
+                // cellObject.pieceType= 'pawn';
+                // cellObject.pieceColor = 'white';
+                // cellObject.firstMove = true;
+                // cellId.addEventListener("click", function (event){
+                //     console.log(event);
+                //     movePiece(event.target.id);
+                //     });
+                document.getElementById(i + '' + j).innerHTML = i + '' + j; //print cell numbers
                 cellId.addEventListener("click", function (event){
                     console.log(event);
                     movePiece(event.target.id);
                     });
             } else if (i > 1 && i < 6){
                 document.getElementById(i + '' + j).innerHTML = i + '' + j; //print cell numbers
-                // cellObject.pieceColor = 'none';
-                // cellObject.cellStatus = 'none';
-                // cellObject.pieceType= 'none';
                 cellId.addEventListener("click", function (event){
                     console.log(event);
                     movePiece(event.target.id);
@@ -146,8 +149,13 @@ function movePiece(id){
   if (cellObject.painted === true) {
       cellObject.newLocation = true;
       updateBoards();
+      return; //to prevent repainting bug
     } else {
-    cellObject.firstClick = true;
+    if (!checkingForCheck){
+        cellObject.firstClick = true;
+        var cellId = document.getElementById(row + '' + cell); //
+        cellId.setAttribute('class', 'clicked-cell');
+    }
     pieceEnRouteHTML = document.getElementById(row + '' + cell).innerHTML; //temporary storage for moving piece
     pieceEnRouteObj.pieceType = cellObject.pieceType;
     pieceEnRouteObj.pieceColor = cellObject.pieceColor;
@@ -155,27 +163,31 @@ function movePiece(id){
     }
   switch (cellObject.pieceType) {
       case 'rook':
-          var myRook = new Rook(id, cellObject, boardStateArray);
+          var myRook = new Rook(id, cellObject, boardStateArray, checkingForCheck);
           myRook.getTargets('up', row, cell);
           myRook.getTargets('down', row, cell);
           myRook.getTargets('left', row, cell);
           myRook.getTargets('right', row, cell);
           console.log(myRook.cellsToPaint);
           cellsToPaint = myRook.cellsToPaint;
-          paintTargets(cellsToPaint);
+          if (!checkingForCheck){
+              paintTargets(cellsToPaint);
+          }
           break;
       case 'bishop':
-          var myBishop = new Bishop(id, cellObject, boardStateArray);
+          var myBishop = new Bishop(id, cellObject, boardStateArray, checkingForCheck);
           myBishop.getTargets('upRight', row, cell);
           myBishop.getTargets('upLeft', row, cell);
           myBishop.getTargets('downRight', row, cell);
           myBishop.getTargets('downLeft', row, cell);
           console.log(myBishop.cellsToPaint);
           cellsToPaint = myBishop.cellsToPaint;
-          paintTargets(cellsToPaint);
+          if (!checkingForCheck){
+              paintTargets(cellsToPaint);
+          }
           break;
       case 'queen':
-          var myQueen = new Queen(id, cellObject, boardStateArray);
+          var myQueen = new Queen(id, cellObject, boardStateArray, checkingForCheck);
           myQueen.getTargets('up', row, cell);
           myQueen.getTargets('down', row, cell);
           myQueen.getTargets('left', row, cell);
@@ -186,10 +198,12 @@ function movePiece(id){
           myQueen.getTargets('downLeft', row, cell);
           console.log(myQueen.cellsToPaint);
           cellsToPaint = myQueen.cellsToPaint;
-          paintTargets(cellsToPaint);
+          if (!checkingForCheck){
+              paintTargets(cellsToPaint);
+          }
           break;
       case 'knight':
-          var myKnight = new Knight(id, cellObject, boardStateArray);
+          var myKnight = new Knight(id, cellObject, boardStateArray, checkingForCheck);
           myKnight.getKnightTargets('upLeftKnight', row, cell);
           myKnight.getKnightTargets('upRightKnight', row, cell);
           myKnight.getKnightTargets('downLeftKnight', row, cell);
@@ -200,10 +214,13 @@ function movePiece(id){
           myKnight.getKnightTargets('leftDownKnight', row, cell);
           console.log(myKnight.cellsToPaint);
           cellsToPaint = myKnight.cellsToPaint;
-          paintTargets(cellsToPaint);
+          if (!checkingForCheck){
+              paintTargets(cellsToPaint);
+          }
           break;
       case 'king':
-          var myKing = new King(id, cellObject, boardStateArray);
+
+          var myKing = new King(id, cellObject, boardStateArray, checkingForCheck);
           myKing.getKingTargets('up', row, cell);
           myKing.getKingTargets('down', row, cell);
           myKing.getKingTargets('left', row, cell);
@@ -214,10 +231,22 @@ function movePiece(id){
           myKing.getKingTargets('downLeft', row, cell);
           console.log(myKing.cellsToPaint);
           cellsToPaint = myKing.cellsToPaint;
-          paintTargets(cellsToPaint);
+          checkingForCheck = true;
+          if (checkingForCheck){
+              if (pieceColor === 'black') {
+                  opponentColor = 'white';
+              } else {
+                  opponentColor = 'black';
+              }
+          }
+          checkForCheck();
+          checkingForCheck = false;
+          if (!checkingForCheck){
+              paintTargets(cellsToPaint);
+          }
           break;
           case 'pawn':
-               var myPawn = new Pawn(id, cellObject, boardStateArray);
+               var myPawn = new Pawn(id, cellObject, boardStateArray, checkingForCheck);
                if (pieceColor === 'black'){
                    if (firstMove === true){
                        myPawn.getPawnTargets('firstDownPawn', row, cell);
@@ -245,21 +274,40 @@ function movePiece(id){
                }
                console.log(myPawn.cellsToPaint);
                cellsToPaint = myPawn.cellsToPaint;
-               paintTargets(cellsToPaint);
+               if (!checkingForCheck){
+                   paintTargets(cellsToPaint);
+               }
                break;
           }
       }
 
+function checkForCheck(){ //should we move this back to the king prototype?
+  for (var i = 0; i < boardStateArray.length; i++){
+      for(var j= 0; j < boardStateArray[i].length; j++){
+          if (boardStateArray[i][j].pieceType && boardStateArray[i][j].pieceColor === opponentColor && boardStateArray[i][j].pieceType !== 'king'){
+              movePiece(i + '' + j);
+              }
+          }
+      }
+      for(var k = 0; k < cellsToPaint.length; k++){
+          for(var l = 0; l < cellsForCheck.length; l++){
+              if(cellsToPaint[k] === cellsForCheck[l]){
+          cellsToPaint.splice(k, 1); //LESSON! THIS IS THE WRONG WAY TO SPLICE: cellsToPaint.splice(cellsToPaint[k], 1);
+          }
+      }
+  }
+}
 
 
-
-function Piece(row, cell, pieceType, pieceColor, boardStateArray){
+function Piece(row, cell, pieceType, pieceColor, boardStateArray, checkingForCheck){
   this.row = row;
   this.cell = cell;
   this.pieceType = pieceType;
   this.pieceColor = pieceColor;
   this.boardStateArray = boardStateArray;
-  this.cellsToPaint = [];
+  this.checkingForCheck = checkingForCheck;
+  this.cellsToPaint = cellsToPaint;
+  this.cellsForCheck = cellsForCheck;
   // this.cellStatus = cellStatus;
 }
 Piece.prototype.getTargets = function(direction, row, cell){
@@ -302,40 +350,48 @@ Piece.prototype.getTargets = function(direction, row, cell){
         }
         if (!this.boardStateArray[this.row][this.cell].pieceType){
             var targetCell = (this.row) + '' + (this.cell);
-            this.cellsToPaint.push(targetCell);
-            this.boardStateArray[this.row][this.cell].painted = true;
+            if (checkingForCheck){
+                this.cellsForCheck.push(targetCell);
+            } else {
+                this.cellsToPaint.push(targetCell);
+                this.boardStateArray[this.row][this.cell].painted = true;
+            }
         }else if (this.boardStateArray[this.row][this.cell] && this.boardStateArray[this.row][this.cell].pieceColor === this.pieceColor){
             break;
         }else if (this.boardStateArray[this.row][this.cell] && this.boardStateArray[this.row][this.cell].pieceColor !== this.pieceColor){
             var targetCell = (this.row) + '' + (this.cell);
-            this.cellsToPaint.push(targetCell);
-            this.boardStateArray[this.row][this.cell].painted = true;
+            if (checkingForCheck){
+                this.cellsForCheck.push(targetCell);
+            } else {
+                this.cellsToPaint.push(targetCell);
+                this.boardStateArray[this.row][this.cell].painted = true;
+            }
             potentialCapture++;
             break;
         }
     }
 };
 //piece prototype move function?
-function Rook(id, cellObject, boardStateArray){
+function Rook(id, cellObject, boardStateArray, checkingForCheck){
   Piece.call(this, parseInt(id[0]), parseInt(id[1]), cellObject.pieceType, cellObject.pieceColor, boardStateArray);
 }
 Rook.prototype = Piece.prototype;
 
 
-function Bishop(id, cellObject, boardStateArray){
+function Bishop(id, cellObject, boardStateArray, checkingForCheck){
    Piece.call(this, parseInt(id[0]), parseInt(id[1]), cellObject.pieceType, cellObject.pieceColor, boardStateArray);
 }
 Bishop.prototype = Piece.prototype;
 
 
-function Queen(id, cellObject, boardStateArray){
+function Queen(id, cellObject, boardStateArray, checkingForCheck){
    Piece.call(this, parseInt(id[0]), parseInt(id[1]), cellObject.pieceType, cellObject.pieceColor, boardStateArray);
 }
 Queen.prototype = Piece.prototype;
 
 
 
-function Knight(id, cellObject, boardStateArray){
+function Knight(id, cellObject, boardStateArray, checkingForCheck){
     Piece.call(this, parseInt(id[0]), parseInt(id[1]), cellObject.pieceType, cellObject.pieceColor, boardStateArray);
 }
 Knight.prototype = Piece.prototype;
@@ -389,22 +445,30 @@ Knight.prototype.getKnightTargets = function(direction, row, cell) {
     }
     if (!this.boardStateArray[this.row][this.cell].pieceType){
         var targetCell = (this.row) + '' + (this.cell);
-        this.cellsToPaint.push(targetCell);
-        this.boardStateArray[this.row][this.cell].painted = true;
+        if (checkingForCheck){
+            this.cellsForCheck.push(targetCell);
+        } else {
+            this.cellsToPaint.push(targetCell);
+            this.boardStateArray[this.row][this.cell].painted = true;
+        }
         // this.boardStateArray[this.row][this.cell].cellStatus = 'available';
     }else if (this.boardStateArray[this.row][this.cell] && this.boardStateArray[this.row][this.cell].pieceColor === this.pieceColor){
         return;
     }else if (this.boardStateArray[this.row][this.cell] && this.boardStateArray[this.row][this.cell].pieceColor !== this.pieceColor){
         var targetCell = (this.row) + '' + (this.cell);
-        this.cellsToPaint.push(targetCell);
-        this.boardStateArray[this.row][this.cell].painted = true;
+        if (checkingForCheck){
+            this.cellsForCheck.push(targetCell);
+        } else {
+            this.cellsToPaint.push(targetCell);
+            this.boardStateArray[this.row][this.cell].painted = true;
+        }
         return;
         }
 };
 
 
 
-function King(id, cellObject, boardStateArray){
+function King(id, cellObject, boardStateArray, checkingForCheck){
     Piece.call(this, parseInt(id[0]), parseInt(id[1]), cellObject.pieceType, cellObject.pieceColor, boardStateArray);
 }
 King.prototype = Piece.prototype;
@@ -446,21 +510,29 @@ King.prototype.getKingTargets = function(direction, row, cell) {
     }
     if (!this.boardStateArray[this.row][this.cell].pieceType){
         var targetCell = (this.row) + '' + (this.cell);
-        this.cellsToPaint.push(targetCell);
-        this.boardStateArray[this.row][this.cell].painted = true;
-        // this.boardStateArray[this.row][this.cell].cellStatus = 'available';
+        if (checkingForCheck){
+            this.cellsForCheck.push(targetCell);
+        } else {
+            this.cellsToPaint.push(targetCell);
+            this.boardStateArray[this.row][this.cell].painted = true;
+        }
     }else if (this.boardStateArray[this.row][this.cell] && this.boardStateArray[this.row][this.cell].pieceColor === this.pieceColor){
         return;
     }else if (this.boardStateArray[this.row][this.cell] && this.boardStateArray[this.row][this.cell].pieceColor !== this.pieceColor){
         var targetCell = (this.row) + '' + (this.cell);
-        this.cellsToPaint.push(targetCell);
-        this.boardStateArray[this.row][this.cell].painted = true;
+        if (checkingForCheck){
+            this.cellsForCheck.push(targetCell);
+        } else {
+            this.cellsToPaint.push(targetCell);
+            this.boardStateArray[this.row][this.cell].painted = true;
+        }
         return;
         }
 };
 
 
-function Pawn(id, cellObject, boardStateArray){
+
+function Pawn(id, cellObject, boardStateArray, checkingForCheck){
     Piece.call(this, parseInt(id[0]), parseInt(id[1]), cellObject.pieceType, cellObject.pieceColor, boardStateArray);
 }
 Pawn.prototype = Piece.prototype;
@@ -520,16 +592,24 @@ Pawn.prototype.getPawnTargets = function(direction, row, cell) {
        }
     if (!this.boardStateArray[this.row][this.cell].pieceType){
         var targetCell = (this.row) + '' + (this.cell);
-        this.cellsToPaint.push(targetCell);
-        this.boardStateArray[this.row][this.cell].painted = true;
+        if (checkingForCheck){
+            this.cellsForCheck.push(targetCell);
+        } else {
+            this.cellsToPaint.push(targetCell);
+            this.boardStateArray[this.row][this.cell].painted = true;
+        }
         return;
         // this.boardStateArray[this.row][this.cell].cellStatus = 'available';
     }else if (this.boardStateArray[this.row][this.cell] && this.boardStateArray[this.row][this.cell].pieceColor === this.pieceColor){
         return;
     }else if (this.boardStateArray[this.row][this.cell] && this.boardStateArray[this.row][this.cell].pieceColor !== this.pieceColor){
         var targetCell = (this.row) + '' + (this.cell);
-        this.cellsToPaint.push(targetCell);
-        this.boardStateArray[this.row][this.cell].painted = true;
+        if (checkingForCheck){
+            this.cellsForCheck.push(targetCell);
+        } else {
+            this.cellsToPaint.push(targetCell);
+            this.boardStateArray[this.row][this.cell].painted = true;
+        }
         return;
         }
 };
@@ -549,10 +629,12 @@ Pawn.prototype.getPawnTargets = function(direction, row, cell) {
 //         cellsToPaint = [];
 //     }
 
-function paintTargets(cellsToPaint){
-       var availableRow;
-       var availableCell;
-       var cellClassArray;
+
+
+function paintTargets(cellsToPaint, cellObject, row, cell){
+   var availableRow;
+   var availableCell;
+   var cellClassArray;
    for (var i=0; i < cellsToPaint.length; i++){
        availableRow = parseInt(cellsToPaint[i][0]);
        availableCell = parseInt(cellsToPaint[i][1]);
@@ -567,6 +649,7 @@ function updateBoards(){
         for(var j= 0; j < boardStateArray[i].length; j++){
             if (boardStateArray[i][j].firstClick === true) {
                 document.getElementById(i + '' + j).innerHTML = i + '' + j; //print cell numbers
+                document.getElementById(i + '' + j).setAttribute('class', 'cell');
                 delete boardStateArray[i][j].firstClick;
                 delete boardStateArray[i][j].pieceType;
                 delete boardStateArray[i][j].pieceColor;
@@ -576,6 +659,7 @@ function updateBoards(){
                 document.getElementById(i + '' + j).setAttribute('class', 'cell');
                 boardStateArray[i][j] = pieceEnRouteObj;
                 delete boardStateArray[i][j].newLocation;
+                delete boardStateArray[i][j].firstClick;
             }
             if (boardStateArray[i][j].painted === true){
                 document.getElementById(i + '' + j).setAttribute('class', 'cell');
@@ -584,9 +668,11 @@ function updateBoards(){
         }
     }
     cellsToPaint = [];
+    cellsForCheck = [];
     console.log(boardStateArray);
     pieceEnRouteHTML = '';
     pieceEnRouteObj = {};
+    opponentColor = '';
 }
 
 // function testRemovePaint(cellId, availableRow, availabeCell){
